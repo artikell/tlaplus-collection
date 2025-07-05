@@ -1,0 +1,4 @@
+states
+*.out
+.vscode
+tla2tools.jar
