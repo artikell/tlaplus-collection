@@ -47,10 +47,19 @@ check_command() {
         echo "Error: java is not installed."
         exit 1
     }
-    java -jar tla2tools.jar -config model.cfg $module_name/$module_name.tla || {
-        echo "Error: Command for module '$module_name' is not valid."
-        exit 1
-    }
+
+    if [[ ! -f $module_name/$module_name.cfg ]]; then
+        java -jar tla2tools.jar -config model.cfg $module_name/$module_name.tla || {
+            echo "Error: Command for module '$module_name' is not valid."
+            exit 1
+        }
+    else
+        java -jar tla2tools.jar -config $module_name/$module_name.cfg $module_name/$module_name.tla || {
+            echo "Error: Command for module '$module_name' is not valid."
+            exit 1
+        }
+    fi
+
     echo "Command for module '$module_name' is valid."
 }
 
@@ -77,6 +86,26 @@ add_module() {
     }
 }
 
+transform() {
+    module_name=$1
+    if [[ -z "$module_name" ]]; then
+        echo "Error: No module name provided."
+        exit 1
+    fi
+
+    if [[ ! -d "$module_name" ]]; then
+        echo "Error: Module '$module_name' does not exist."
+        exit 1
+    fi
+
+    java -cp tla2tools.jar pcal.trans $module_name/$module_name.tla || {
+        echo "Error: Transformation failed for module '$module_name'."
+        exit 1
+    }
+
+    check_command "$module_name"
+}
+
 while [[ "$1" != "" ]]; do
     case $1 in
         -h | --help )
@@ -97,6 +126,10 @@ while [[ "$1" != "" ]]; do
             ;;
         -a | --add )
             add_module "$2"
+            exit 0
+            ;;
+        -t | --transform )
+            transform "$2"
             exit 0
             ;;
         * )
