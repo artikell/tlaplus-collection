@@ -71,7 +71,7 @@ add_module() {
     echo "====" >> "$module_name/$module_name.tla"
     echo "Module '$module_name' created successfully."
 
-    java -jar tla2tools.jar -config model.cfg $module_name/$module_name.tla || {
+    java -jar tla2tools.jar -config model.cfg $module_name/$module_name.tla > /dev/null 2>&1 || {
         echo "Error: Failed to validate the module '$module_name'."
         exit 1
     }
