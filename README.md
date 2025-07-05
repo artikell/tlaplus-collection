@@ -15,3 +15,4 @@ This repository contains the following modules:
 
 - [TLAPlus](https://github.com/tlaplus/tlaplus)
 - [Learn TLA](https://learntla.com/index.html)
+- [Awesome TLA](https://github.com/tlaplus/awesome-tlaplus)

@@ -47,7 +47,7 @@ check_command() {
         echo "Error: java is not installed."
         exit 1
     }
-    java -jar tla2tools.jar -config model.cfg $module_name/$module_name.tla > /dev/null 2>&1 || {
+    java -jar tla2tools.jar -config model.cfg $module_name/$module_name.tla || {
         echo "Error: Command for module '$module_name' is not valid."
         exit 1
     }
