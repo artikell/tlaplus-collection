@@ -34,7 +34,7 @@ download() {
 }
 
 check_command() {
-    module_name=$1
+    module_name=${1//\/}
     if [[ -z "$module_name" ]]; then
         echo "Error: No module name provided."
         exit 1
@@ -66,7 +66,7 @@ check_command() {
 }
 
 add_module() {
-    module_name=$1
+    module_name=${1//\/}
     if [[ -z "$module_name" ]]; then
         echo "Error: No module name provided."
         exit 1
@@ -89,7 +89,7 @@ add_module() {
 }
 
 transform() {
-    module_name=$1
+    module_name=${1//\/}
     if [[ -z "$module_name" ]]; then
         echo "Error: No module name provided."
         exit 1

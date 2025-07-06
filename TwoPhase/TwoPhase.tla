@@ -2,20 +2,22 @@
 
 EXTENDS Integers
 
-(*--algorithm wire
+(* --algorithm TwoPhase {
     variables
-        people={"alice","bob"},
+        people={"alice", "bob", "charlie"},
         acc=[p \in people |-> 6];
-begin
-    skip;
-end algorithm;*)
-\* BEGIN TRANSLATION (chksum(pcal) = "67c19764" /\ chksum(tla) = "bb299360")
+    {
+        skip;
+    }
+} *)
+\* --------------------------------
+\* BEGIN TRANSLATION (chksum(pcal) = "6e4a9ef3" /\ chksum(tla) = "4325ea7a")
 VARIABLES pc, people, acc
 
 vars == << pc, people, acc >>
 
 Init == (* Global variables *)
-        /\ people = {"alice","bob"}
+        /\ people = {"alice", "bob", "charlie"}
         /\ acc = [p \in people |-> 6]
         /\ pc = "Lbl_1"
 
