@@ -8,11 +8,13 @@ usage() {
     echo "  -d, --download   Download necessary files"
     echo "  -c, --check <module_name>  Check if the command for a module is valid"
     echo "  -a, --add <module_name>     Add a new module"
+    echo "  -t, --translate <module_name>     Translate a module"
     echo "Examples:"
     echo "  $0 -v"
     echo "  $0 -d"
     echo "  $0 -c MyModule"
     echo "  $0 -a NewModule"
+    echo "  $0 -t MyModule"
     echo "  $0 --help"
     echo "  $0 --version"
 }
