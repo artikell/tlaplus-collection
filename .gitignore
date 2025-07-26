@@ -4,3 +4,4 @@ states
 tla2tools.jar
 *_TTrace_*.tla
 *.old
+*_TTrace_*.bin
