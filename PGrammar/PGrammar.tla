@@ -10,11 +10,18 @@ EXTENDS Integers, TLC, Naturals, Sequences, FiniteSets
 (* --algorithm PGrammar
 variable strvar = "Hello World",
         boolvar = TRUE,
-        intvar = 42;
-        setvar = 1..10;
-        sequencevar = <<1, 2, 3>>;
-        structvar = [x |-> 1, y |-> 2];
+        intvar = 42,
+        setvar = 1..10,
+        sequencevar = <<1, 2, 3>>,
+        structvar = [x |-> 1, y |-> 2],
         funcationvar = [x \in 1..3 |-> x * 2];
+
+macro inc(var) begin
+  if var < 10 then
+    var := var + 1;
+  end if;
+end macro;
+
 begin
     print strvar;
     print boolvar;
@@ -45,12 +52,10 @@ begin
 
     if intvar > 0 then
         print "intvar is positive";
-    else 
-        if intvar < 0 then
-            print "intvar is negative";
-        else
-            print "intvar is zero";
-        end if;
+    elsif intvar < 0 then
+        print "intvar is negative";
+    else
+        print "intvar is zero";
     end if;
 
     (* Perform some operations on set *)
