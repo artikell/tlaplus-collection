@@ -10,6 +10,12 @@ EXTENDS Integers, TLC, Naturals, Sequences, FiniteSets
 \* Define a function to print values
 set ++ elem == set \union {elem}
 
+(* Todo: Implement some operations on:
+    - when
+    - await
+    - process
+*)
+
 (* --algorithm PGrammar
 variable strvar = "Hello World",
         boolvar = TRUE,
