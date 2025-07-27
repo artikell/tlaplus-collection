@@ -7,10 +7,13 @@
  *)
 EXTENDS Integers, TLC, Naturals, Sequences, FiniteSets
 
+\* Define a function to print values
+set ++ elem == set \union {elem}
+
 (* --algorithm PGrammar
 variable strvar = "Hello World",
         boolvar = TRUE,
-        intvar = 42,
+        intvar \in 42..43,
         setvar = 1..10,
         sequencevar = <<1, 2, 3>>,
         structvar = [x |-> 1, y |-> 2],
@@ -31,14 +34,16 @@ begin
     print structvar;
     print funcationvar;
 
+    print "Perform some operations on boolean";
+    print ~boolvar;
     if boolvar then
         print "Boolean is true";
     else
         print "Boolean is false";
     end if;
+    assert boolvar;
 
-    (* Perform some operations on integer *)
-
+    print "Perform some operations on integer";
     intvar := intvar + 1;
     print intvar;
     intvar := intvar * 2;
@@ -58,11 +63,34 @@ begin
         print "intvar is zero";
     end if;
 
-    (* Perform some operations on set *)
+    if intvar = 0 \/ intvar # 0 \/ intvar /= 0 then
+        print "intvar is zero";
+    else
+        print "intvar is not zero";
+    end if;
+
+    print "Perform some operations on set";
     print Seq(setvar);
     print Cardinality(setvar);
+    if 5 \in setvar \/ 5 \notin setvar then
+        print "5 is in setvar or 5 is not in setvar";
+    end if;
 
-    (* Perform some operations on sequence *)
+    if 2..3 \subseteq setvar then
+        print "2..3 is a subset of setvar";
+    end if;
+
+    print setvar ++ 2;
+    print 1..2 \cup setvar;
+    print 1..2 \union setvar;
+    print 1..2 \cap setvar;
+    print 1..2 \intersect setvar;
+    setvar := 1..2;
+    print setvar \X setvar;
+    print SUBSET setvar;
+    \* print 1..2 \setminus setvar;
+
+    print "Perform some operations on sequence";
     \* sequencevar := Seq(setvar);
     sequencevar := Append(sequencevar, 16);
     print Len(sequencevar);
@@ -70,10 +98,26 @@ begin
     print Tail(sequencevar);
     print sequencevar \o << 4, 5, 6 >>;
     print SubSeq(sequencevar, 1, 2);
+
+    while sequencevar /= <<>> do
+        print Head(sequencevar);
+        sequencevar := Tail(sequencevar);
+    end while;
     \* print SelectSeq(<<1, 2, 3>>, IsEven);
+
+    print "Perform some operations on record";
+    either
+        print "Done";
+    or
+        print "Not done";
+    end either;
+
+    with v \in 1..2 do
+        print v;
+    end with;
 end algorithm;
 *)
-\* BEGIN TRANSLATION (chksum(pcal) = "2d08e5c0" /\ chksum(tla) = "be0e689")
+\* BEGIN TRANSLATION (chksum(pcal) = "b74f0f9a" /\ chksum(tla) = "20b4e422")
 VARIABLES pc, strvar, boolvar, intvar, setvar, sequencevar, structvar, 
           funcationvar
 
@@ -83,7 +127,7 @@ vars == << pc, strvar, boolvar, intvar, setvar, sequencevar, structvar,
 Init == (* Global variables *)
         /\ strvar = "Hello World"
         /\ boolvar = TRUE
-        /\ intvar = 42
+        /\ intvar \in 42..43
         /\ setvar = 1..10
         /\ sequencevar = <<1, 2, 3>>
         /\ structvar = [x |-> 1, y |-> 2]
@@ -98,9 +142,13 @@ Lbl_1 == /\ pc = "Lbl_1"
          /\ PrintT(sequencevar)
          /\ PrintT(structvar)
          /\ PrintT(funcationvar)
+         /\ PrintT("Perform some operations on boolean")
+         /\ PrintT(~boolvar)
          /\ IF boolvar
                THEN /\ PrintT("Boolean is true")
                ELSE /\ PrintT("Boolean is false")
+         /\ Assert(boolvar, "Failure of assertion at line 44, column 5.")
+         /\ PrintT("Perform some operations on integer")
          /\ intvar' = intvar + 1
          /\ PrintT(intvar')
          /\ pc' = "Lbl_2"
@@ -136,21 +184,55 @@ Lbl_5 == /\ pc = "Lbl_5"
                ELSE /\ IF intvar' < 0
                           THEN /\ PrintT("intvar is negative")
                           ELSE /\ PrintT("intvar is zero")
+         /\ IF intvar' = 0 \/ intvar' # 0 \/ intvar' /= 0
+               THEN /\ PrintT("intvar is zero")
+               ELSE /\ PrintT("intvar is not zero")
+         /\ PrintT("Perform some operations on set")
          /\ PrintT(Seq(setvar))
          /\ PrintT(Cardinality(setvar))
+         /\ IF 5 \in setvar \/ 5 \notin setvar
+               THEN /\ PrintT("5 is in setvar or 5 is not in setvar")
+               ELSE /\ TRUE
+         /\ IF 2..3 \subseteq setvar
+               THEN /\ PrintT("2..3 is a subset of setvar")
+               ELSE /\ TRUE
+         /\ PrintT(setvar ++ 2)
+         /\ PrintT(1..2 \cup setvar)
+         /\ PrintT(1..2 \union setvar)
+         /\ PrintT(1..2 \cap setvar)
+         /\ PrintT(1..2 \intersect setvar)
+         /\ setvar' = 1..2
+         /\ PrintT(setvar' \X setvar')
+         /\ PrintT(SUBSET setvar')
+         /\ PrintT("Perform some operations on sequence")
          /\ sequencevar' = Append(sequencevar, 16)
          /\ PrintT(Len(sequencevar'))
          /\ PrintT(Head(sequencevar'))
          /\ PrintT(Tail(sequencevar'))
          /\ PrintT(sequencevar' \o << 4, 5, 6 >>)
          /\ PrintT(SubSeq(sequencevar', 1, 2))
-         /\ pc' = "Done"
-         /\ UNCHANGED << strvar, boolvar, setvar, structvar, funcationvar >>
+         /\ pc' = "Lbl_6"
+         /\ UNCHANGED << strvar, boolvar, structvar, funcationvar >>
+
+Lbl_6 == /\ pc = "Lbl_6"
+         /\ IF sequencevar /= <<>>
+               THEN /\ PrintT(Head(sequencevar))
+                    /\ sequencevar' = Tail(sequencevar)
+                    /\ pc' = "Lbl_6"
+               ELSE /\ PrintT("Perform some operations on record")
+                    /\ \/ /\ PrintT("Done")
+                       \/ /\ PrintT("Not done")
+                    /\ \E v \in 1..2:
+                         PrintT(v)
+                    /\ pc' = "Done"
+                    /\ UNCHANGED sequencevar
+         /\ UNCHANGED << strvar, boolvar, intvar, setvar, structvar, 
+                         funcationvar >>
 
 (* Allow infinite stuttering to prevent deadlock on termination. *)
 Terminating == pc = "Done" /\ UNCHANGED vars
 
-Next == Lbl_1 \/ Lbl_2 \/ Lbl_3 \/ Lbl_4 \/ Lbl_5
+Next == Lbl_1 \/ Lbl_2 \/ Lbl_3 \/ Lbl_4 \/ Lbl_5 \/ Lbl_6
            \/ Terminating
 
 Spec == Init /\ [][Next]_vars
